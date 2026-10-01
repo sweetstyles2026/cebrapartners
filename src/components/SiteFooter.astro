@@ -1,0 +1,14 @@
+---
+import { site } from '@/config/site';
+
+const copyright = `© ${new Date().getFullYear()} ${site.name}`;
+---
+
+<footer class="px-5 pt-16 pb-6 text-sm text-white/80 sm:px-6">
+  <p>
+    {copyright} ·{' '}
+    <a href={`mailto:${site.email}`} class="underline-offset-4 hover:text-white hover:underline">
+      {site.email}
+    </a>
+  </p>
+</footer>

@@ -1,0 +1,72 @@
+@import 'tailwindcss';
+
+/*
+ * Design tokens. Tailwind turns these into utilities, e.g.
+ * --color-ink -> `text-ink`, `bg-ink`; --font-display -> `font-display`.
+ */
+@theme {
+  --font-sans: 'Epilogue Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Epilogue Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-ui: 'Questrial', ui-sans-serif, system-ui, sans-serif;
+
+  --color-ink: #1a212f;
+  --color-charcoal: #353536;
+  --color-sunrise: #e79100;
+  --color-dusk: #4940cd;
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--color-charcoal);
+  }
+
+  :focus-visible {
+    outline: 2px solid white;
+    outline-offset: 3px;
+  }
+}
+
+/*
+ * Page backdrop: an orange-to-violet gradient with a half-transparent
+ * architectural line drawing on top. To use a photo instead, replace
+ * /public/images/backdrop.svg (or point --backdrop-image at another file).
+ */
+@utility site-backdrop {
+  --backdrop-image: url('/images/backdrop.svg');
+  position: relative;
+  isolation: isolate;
+  background-image: linear-gradient(45deg, var(--color-sunrise) 0%, var(--color-dusk) 100%);
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--backdrop-image) center / cover no-repeat;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
+/* Keeps white copy legible on the lighter parts of the gradient. */
+@utility text-lift {
+  text-shadow: 0 1px 2px rgb(26 33 47 / 0.18);
+}
+
+/*
+ * Shared two-column page grid on large screens: a narrow 163px side column
+ * (used for photos on the About page) and a main content column.
+ * Place content with `lg:col-start-2`; on small screens everything stacks.
+ */
+@utility page-grid {
+  @media (width >= 64rem) {
+    display: grid;
+    grid-template-columns: 163px minmax(0, 48rem);
+    column-gap: 0.75rem;
+  }
+}

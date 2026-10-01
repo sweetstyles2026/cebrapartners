@@ -1,0 +1,21 @@
+---
+import ArrowButton from '@/components/ArrowButton.astro';
+import { contactHref, site } from '@/config/site';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Home">
+  <section class="page-grid pt-16 lg:pt-24">
+    <div class="lg:col-start-2">
+      <h1 class="font-display text-4xl font-bold sm:text-[50px] sm:leading-tight">{site.name}</h1>
+      <p class="mt-4 max-w-[30rem] text-lg leading-[1.45]">
+        Cebra Partners is focused on acquiring, operating, and growing privately-owned businesses in Kansas and
+        Missouri. Led by a driven entrepreneur and supported by a team of partners and advisors, Cebra Partners is a
+        permanent home for great businesses and the teams who lead them.
+      </p>
+      <ArrowButton href={contactHref} class="mt-7 lg:-ml-2.5">
+        Contact Us
+      </ArrowButton>
+    </div>
+  </section>
+</BaseLayout>

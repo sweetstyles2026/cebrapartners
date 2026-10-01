@@ -1,0 +1,18 @@
+---
+import ArrowButton from '@/components/ArrowButton.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Page not found" description="The page you are looking for could not be found.">
+  <section class="page-grid pt-16 lg:pt-24">
+    <div class="lg:col-start-2">
+      <h1 class="font-display text-4xl font-bold sm:text-[50px] sm:leading-tight">Page not found</h1>
+      <p class="mt-4 max-w-[30rem] text-lg leading-[1.45]">
+        Sorry, we couldn’t find that page. It may have moved, or the link may be incorrect.
+      </p>
+      <ArrowButton href="/" class="mt-7 lg:-ml-2.5">
+        Back to Home
+      </ArrowButton>
+    </div>
+  </section>
+</BaseLayout>

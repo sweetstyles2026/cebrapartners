@@ -1,0 +1,24 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+type Props = HTMLAttributes<'a'>;
+
+const { class: className, ...attrs } = Astro.props;
+---
+
+<a
+  class:list={[
+    'group font-ui inline-flex h-[45px] items-center justify-center gap-2 rounded-full bg-[rgb(34_34_35/0.59)] px-11 text-[15px] font-bold text-white transition-colors duration-200 hover:bg-white hover:text-ink',
+    className,
+  ]}
+  {...attrs}
+>
+  <slot />
+  <svg
+    class="h-auto w-9 fill-current transition-transform duration-200 group-hover:translate-x-1"
+    viewBox="9 70 182 61"
+    aria-hidden="true"
+  >
+    <path d="M159 70.9l-2.2 2.4L183.6 99H9v3h174.6l-26.2 25.3 2.1 2.6 30.5-29.3-31-29.7z"></path>
+  </svg>
+</a>

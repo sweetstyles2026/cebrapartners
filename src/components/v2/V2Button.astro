@@ -1,0 +1,49 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+type Props = HTMLAttributes<'a'> & {
+  variant?: 'primary' | 'ghost' | 'dark';
+  size?: 'sm' | 'md';
+  icon?: 'right' | 'down';
+};
+
+const { variant = 'primary', size = 'md', icon = 'right', class: className, ...attrs } = Astro.props;
+
+const variants = {
+  primary: 'bg-amber text-ink hover:bg-paper',
+  ghost: 'border border-white/25 text-paper hover:border-white/60 hover:bg-white/5',
+  dark: 'bg-ink text-paper hover:bg-violet',
+};
+
+const sizes = {
+  sm: 'h-9 px-4 text-sm',
+  md: 'h-12 px-6 text-base',
+};
+---
+
+<a
+  class:list={[
+    'group inline-flex items-center gap-2 rounded-full font-medium whitespace-nowrap transition-colors duration-200',
+    variants[variant],
+    sizes[size],
+    className,
+  ]}
+  {...attrs}
+>
+  <slot />
+  <svg
+    class:list={[
+      'size-4 transition-transform duration-200',
+      icon === 'down' ? 'rotate-90 group-hover:translate-y-0.5' : 'group-hover:translate-x-0.5',
+    ]}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M5 12h14M13 6l6 6-6 6"></path>
+  </svg>
+</a>

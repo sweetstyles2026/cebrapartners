@@ -33,13 +33,17 @@ Other commands:
 ```text
 src/
   config/site.ts        Company name, email, description and the navigation menu
-  layouts/BaseLayout.astro  The page shell: <head>/SEO tags, background, header, footer
-  components/           Reusable pieces (SiteHeader, SiteFooter, ArrowButton)
+  layouts/BaseLayout.astro  The page shell: background, header, footer
+  layouts/V2Layout.astro    The page shell for the /v2/ redesign
+  components/           Reusable pieces (SeoHead, SiteHeader, SiteFooter, ArrowButton)
+  components/v2/        Pieces used only by the /v2/ redesign
   pages/                One file per page — the file name becomes the URL
     index.astro         → /
     about.astro         → /about/
+    v2/index.astro      → /v2/ (redesign preview)
     404.astro           → shown for unknown URLs
   styles/global.css     Tailwind setup, brand colours and fonts
+  styles/v2.css         Design system for the /v2/ redesign
   assets/images/        Photos and logo (automatically resized and converted to WebP)
 public/                 Files copied as-is (favicon, background drawing)
 ```
@@ -72,6 +76,12 @@ It will be live at `/portfolio/`. To show it in the menu, add `{ label: 'Portfol
 **Change the background** — the line drawing is `public/images/backdrop.svg`. To use a photo instead, put it in `public/images/` and change `--backdrop-image` in `src/styles/global.css`, e.g. `url('/images/my-photo.jpg')`. Only use photos you own or have a licence for — the stock photo on the old Wix site is licensed for Wix sites only, so it isn't used here.
 
 **Add or replace a photo** — drop the file in `src/assets/images/` and use it with Astro's `<Image>` component (see `src/pages/about.astro`).
+
+## The /v2/ redesign
+
+`/v2/` is a single-page redesign with the same content, built on its own design system (`src/styles/v2.css`: Fraunces headings, Inter body text, IBM Plex Mono labels, dark "ink" and light "paper" sections with the orange-to-violet brand gradient as an accent). Every text colour pairing meets WCAG AA contrast. It doesn't share styles with the main site, so either design can change without affecting the other.
+
+While it's a preview it is hidden from search engines (`noindex`, and left out of the sitemap). To make it the main site: move its content into `src/pages/index.astro`, then remove `noindex` from `V2Layout.astro` and the `/v2/` filter in `astro.config.mjs`.
 
 ## Publishing (GitHub Pages)
 

@@ -14,5 +14,6 @@ The owner wants every edit published. After making any change:
 
 - Node.js is installed at `C:\Program Files\nodejs`; it may not be on the Bash tool's PATH, so call `"/c/Program Files/nodejs/node.exe" node_modules/astro/bin/astro.mjs build` if `npm` isn't found.
 - Site-wide details (email, description, nav menu) live in `src/config/site.ts`; the domain lives in `astro.config.mjs` (`site`).
+- `/v2/` is a redesign preview with its own design system: `src/styles/v2.css`, `src/layouts/V2Layout.astro`, `src/components/v2/`. It is `noindex` and excluded from the sitemap. Keep v2 classes out of `global.css` (it has `@source not` rules for these paths) and keep text contrast at WCAG AA or better.
 - Don't use stock images from the old Wix site (licensed for Wix only); only use photos the owner provides.
 - The custom domain, DNS (Namecheap) and HTTPS are configured outside the repo — no `CNAME` file is needed.

@@ -1,0 +1,60 @@
+---
+/**
+ * Shared <head> tags: title, description, canonical URL, icons, social previews and
+ * Organization structured data. Used by every layout so SEO stays consistent.
+ */
+import { getImage } from 'astro:assets';
+import { site } from '@/config/site';
+import logo from '@/assets/images/cebra-partners-logo.webp';
+
+interface Props {
+  /** Page name shown in the browser tab, e.g. "About" -> "About | Cebra Partners". */
+  title: string;
+  /** Summary for search engines and link previews. Defaults to the site description. */
+  description?: string;
+  /** Keep the page out of search results (e.g. for previews of a redesign). */
+  noindex?: boolean;
+  /** Browser UI colour on mobile. */
+  themeColor?: string;
+}
+
+const { title, description = site.description, noindex = false, themeColor = '#4940cd' } = Astro.props;
+
+const pageTitle = `${title} | ${site.name}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const shareImage = await getImage({ src: logo, width: 600, height: 600, format: 'jpg' });
+const shareImageUrl = new URL(shareImage.src, Astro.site);
+
+const organization = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: site.name,
+  url: Astro.site?.href,
+  logo: shareImageUrl.href,
+  email: site.email,
+  description: site.description,
+  areaServed: site.areaServed.map((name) => ({ '@type': 'State', name })),
+};
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{pageTitle}</title>
+<meta name="description" content={description} />
+{noindex && <meta name="robots" content="noindex" />}
+<link rel="canonical" href={canonical} />
+<link rel="icon" href="/favicon.png" type="image/png" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<link rel="sitemap" href="/sitemap-index.xml" />
+<meta name="theme-color" content={themeColor} />
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content={site.name} />
+<meta property="og:locale" content={site.locale} />
+<meta property="og:title" content={pageTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={shareImageUrl} />
+<meta name="twitter:card" content="summary" />
+
+<script type="application/ld+json" set:html={JSON.stringify(organization)} />

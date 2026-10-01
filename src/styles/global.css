@@ -1,5 +1,10 @@
 @import 'tailwindcss';
 
+/* The /v2/ redesign has its own stylesheet (v2.css); don't generate its classes here. */
+@source not '../pages/v2';
+@source not '../components/v2';
+@source not '../layouts/V2Layout.astro';
+
 /*
  * Design tokens. Tailwind turns these into utilities, e.g.
  * --color-ink -> `text-ink`, `bg-ink`; --font-display -> `font-display`.

@@ -1,0 +1,128 @@
+/*
+ * v2 design system — used only by V2Layout (the /v2/ redesign).
+ * Kept separate from global.css so the two designs can evolve independently.
+ */
+@import 'tailwindcss' source(none);
+@source '../layouts/V2Layout.astro';
+@source '../components/v2';
+@source '../pages/v2';
+
+/*
+ * Tokens. Every text/background pairing used on the page meets WCAG AA (4.5:1),
+ * most meet AAA (7:1): e.g. fog on ink 11.4, body on paper 9.8, ink on amber 7.5.
+ */
+@theme {
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Fraunces Variable', ui-serif, Georgia, serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+
+  /* Dark surfaces */
+  --color-ink: #121317;
+  --color-ink-2: #1c1e24;
+  --color-fog: #c9cbd1; /* body text on dark */
+  --color-mist: #9a9da6; /* secondary text on dark */
+
+  /* Light surfaces */
+  --color-paper: #f5f2eb;
+  --color-paper-2: #ece7dc;
+  --color-body: #3f3c37; /* body text on light */
+  --color-muted: #5f5b54; /* secondary text on light */
+
+  /* Brand accents (sunrise to dusk, carried over from the original site) */
+  --color-amber: #e79100;
+  --color-rose: #b9619a;
+  --color-violet: #4940cd;
+  --color-violet-light: #8b84ff;
+
+  --animate-rise: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      translate: 0 1.5rem;
+    }
+    to {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--color-ink);
+    color: var(--color-fog);
+  }
+
+  /* Leave room for the sticky header when jumping to a section. */
+  [id] {
+    scroll-margin-top: 5rem;
+  }
+
+  ::selection {
+    background-color: var(--color-amber);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-amber);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+/* Small uppercase label above headings. */
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/* Brand gradient for large display text and accent rules. */
+@utility bg-brand-gradient {
+  background-image: linear-gradient(90deg, var(--color-amber), var(--color-rose) 55%, var(--color-violet-light));
+}
+
+@utility text-brand-gradient {
+  background-image: linear-gradient(90deg, var(--color-amber), var(--color-rose) 55%, var(--color-violet-light));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Page-load entrance; stagger with style="--delay: 120ms". */
+@utility enter {
+  @media (prefers-reduced-motion: no-preference) {
+    animation: var(--animate-rise);
+    animation-delay: var(--delay, 0ms);
+  }
+}
+
+/* Fade/rise as the element scrolls into view (no JavaScript; skipped where unsupported). */
+@utility reveal {
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      animation: rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 70%;
+    }
+  }
+}
+
+/* Fades the hero contour drawing out towards the text side. */
+@utility mask-fade-left {
+  mask-image: linear-gradient(to right, transparent 0%, black 55%);
+}

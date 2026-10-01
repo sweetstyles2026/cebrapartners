@@ -32,21 +32,26 @@ Other commands:
 
 ```text
 src/
-  config/site.ts        Company name, email, description and the navigation menu
-  layouts/BaseLayout.astro  The page shell: background, header, footer
-  layouts/V2Layout.astro    The page shell for the /v2/ redesign
-  components/           Reusable pieces (SeoHead, SiteHeader, SiteFooter, ArrowButton)
-  components/v2/        Pieces used only by the /v2/ redesign
+  config/site.ts        Company name, email, description and the header menu links
+  layouts/BaseLayout.astro  The page shell: header, footer, fonts
+  components/           Reusable pieces (SeoHead, Header, Footer, Button)
   pages/                One file per page — the file name becomes the URL
-    index.astro         → /
-    about.astro         → /about/
-    v2/index.astro      → /v2/ (redesign preview)
+    index.astro         → /  (hero, Acquire/Operate/Grow, About the founder, Contact)
     404.astro           → shown for unknown URLs
-  styles/global.css     Tailwind setup, brand colours and fonts
-  styles/v2.css         Design system for the /v2/ redesign
+  styles/global.css     Design system: colours, fonts, Tailwind setup
   assets/images/        Photos and logo (automatically resized and converted to WebP)
-public/                 Files copied as-is (favicon, background drawing)
+public/                 Files copied as-is (favicon, hero contour drawing)
 ```
+
+Old addresses `/about/` and `/v2/` redirect to the home page (set in `astro.config.mjs`).
+
+## Design system
+
+Defined in `src/styles/global.css`:
+
+- **Type:** Fraunces (serif) for headings, Inter for body text and small uppercase labels (`eyebrow`).
+- **Colours:** dark "ink" sections with light "fog" text, light "paper" sections with dark "body" text, and amber/violet brand accents. Every text colour pairing meets WCAG AA contrast (most meet AAA) — check any new pairing before using it for text.
+- **Motion:** subtle fade-up on load (`enter`) and on scroll (`reveal`); both are switched off for visitors who prefer reduced motion.
 
 ## Common edits
 
@@ -60,28 +65,25 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="Portfolio" description="Businesses that are part of Cebra Partners.">
-  <section class="page-grid pt-10 lg:pt-14">
-    <div class="lg:col-start-2">
-      <h1 class="font-display text-4xl font-bold sm:text-[50px] sm:leading-tight">Portfolio</h1>
-      <p class="mt-4 max-w-3xl">…</p>
+  <section class="bg-paper text-body">
+    <div class="mx-auto max-w-7xl px-5 py-24 sm:px-8 md:py-32">
+      <p class="eyebrow text-violet">Portfolio</p>
+      <h1 class="mt-4 font-serif text-5xl font-semibold tracking-tight text-ink md:text-6xl">Our businesses</h1>
+      <p class="mt-8 max-w-[65ch] text-lg leading-relaxed">…</p>
     </div>
   </section>
 </BaseLayout>
 ```
 
-It will be live at `/portfolio/`. To show it in the menu, add `{ label: 'Portfolio', href: '/portfolio/' }` to `nav` in `src/config/site.ts`.
+It will be live at `/portfolio/`. To show it in the header menu, add `{ label: 'Portfolio', href: '/portfolio/' }` to `nav` in `src/config/site.ts`.
 
-**Change colours or fonts** — edit the `@theme` block in `src/styles/global.css`. For example `--color-sunrise` and `--color-dusk` are the two ends of the background gradient.
+**Add a section to the home page** — copy one of the `<section>` blocks in `src/pages/index.astro` (dark: no background class; light: `bg-paper text-body`) and give it an `id` if the menu should link to it (e.g. `/#portfolio`).
 
-**Change the background** — the line drawing is `public/images/backdrop.svg`. To use a photo instead, put it in `public/images/` and change `--backdrop-image` in `src/styles/global.css`, e.g. `url('/images/my-photo.jpg')`. Only use photos you own or have a licence for — the stock photo on the old Wix site is licensed for Wix sites only, so it isn't used here.
+**Change colours or fonts** — edit the `@theme` block in `src/styles/global.css`.
 
-**Add or replace a photo** — drop the file in `src/assets/images/` and use it with Astro's `<Image>` component (see `src/pages/about.astro`).
+**Change the hero drawing** — it's `public/images/contours.svg`. Only use photos or artwork you own or have a licence for — the stock photo on the old Wix site is licensed for Wix sites only, so it isn't used here.
 
-## The /v2/ redesign
-
-`/v2/` is a single-page redesign with the same content, built on its own design system (`src/styles/v2.css`: Fraunces headings, Inter body text, IBM Plex Mono labels, dark "ink" and light "paper" sections with the orange-to-violet brand gradient as an accent). Every text colour pairing meets WCAG AA contrast. It doesn't share styles with the main site, so either design can change without affecting the other.
-
-While it's a preview it is hidden from search engines (`noindex`, and left out of the sitemap). To make it the main site: move its content into `src/pages/index.astro`, then remove `noindex` from `V2Layout.astro` and the `/v2/` filter in `astro.config.mjs`.
+**Add or replace a photo** — drop the file in `src/assets/images/` and use it with Astro's `<Image>` component (see the About section in `src/pages/index.astro`).
 
 ## Publishing (GitHub Pages)
 

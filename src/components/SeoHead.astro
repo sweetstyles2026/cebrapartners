@@ -18,7 +18,7 @@ interface Props {
   themeColor?: string;
 }
 
-const { title, description = site.description, noindex = false, themeColor = '#4940cd' } = Astro.props;
+const { title, description = site.description, noindex = false, themeColor = '#121317' } = Astro.props;
 
 const pageTitle = `${title} | ${site.name}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);

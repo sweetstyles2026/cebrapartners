@@ -17,10 +17,13 @@ export const site = {
   locale: 'en_US',
   areaServed: ['Kansas', 'Missouri'],
 
-  /** Top navigation. Add a new page to `src/pages/` and list it here to show it in the menu. */
+  /**
+   * Header menu links (shown on tablet and desktop). Links can point to a section on the home page
+   * (`/#about`) or to another page in `src/pages/` (e.g. `/portfolio/`).
+   */
   nav: [
-    { label: 'Home', href: '/' },
-    { label: 'About', href: '/about/' },
+    { label: 'About', href: '/#about' },
+    { label: 'Contact', href: '/#contact' },
   ] satisfies NavItem[],
 };
 

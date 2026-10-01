@@ -7,17 +7,8 @@ const copyright = `© ${new Date().getFullYear()} ${site.name} · ${site.areaSer
 <footer class="border-t border-white/10">
   <div class="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-10 text-sm text-mist sm:flex-row sm:items-center sm:justify-between sm:px-8">
     <p>{copyright}</p>
-    <ul class="flex flex-wrap gap-x-6 gap-y-2">
-      <li>
-        <a href={`mailto:${site.email}`} class="transition-colors hover:text-paper">
-          {site.email}
-        </a>
-      </li>
-      <li>
-        <a href="/" class="transition-colors hover:text-paper">
-          Classic site
-        </a>
-      </li>
-    </ul>
+    <a href={`mailto:${site.email}`} class="transition-colors hover:text-paper">
+      {site.email}
+    </a>
   </div>
 </footer>

@@ -1,77 +1,117 @@
 @import 'tailwindcss';
 
-/* The /v2/ redesign has its own stylesheet (v2.css); don't generate its classes here. */
-@source not '../pages/v2';
-@source not '../components/v2';
-@source not '../layouts/V2Layout.astro';
-
 /*
- * Design tokens. Tailwind turns these into utilities, e.g.
- * --color-ink -> `text-ink`, `bg-ink`; --font-display -> `font-display`.
+ * Design tokens. Tailwind turns these into utilities, e.g. --color-ink -> `bg-ink`, `text-ink`;
+ * --font-serif -> `font-serif`.
+ *
+ * Every text/background pairing used on the site meets WCAG AA (4.5:1), most meet AAA (7:1):
+ * e.g. fog on ink 11.4, mist on ink 6.9, body on paper 9.8, muted on paper 6.0, ink on amber 7.5.
+ * Check new pairings before using them for text.
  */
 @theme {
-  --font-sans: 'Epilogue Variable', ui-sans-serif, system-ui, sans-serif;
-  --font-display: 'Epilogue Variable', ui-sans-serif, system-ui, sans-serif;
-  --font-ui: 'Questrial', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Fraunces Variable', ui-serif, Georgia, serif;
 
-  --color-ink: #1a212f;
-  --color-charcoal: #353536;
-  --color-sunrise: #e79100;
-  --color-dusk: #4940cd;
+  /* Dark surfaces */
+  --color-ink: #121317;
+  --color-ink-2: #1c1e24;
+  --color-fog: #c9cbd1; /* body text on dark */
+  --color-mist: #9a9da6; /* secondary text on dark */
+
+  /* Light surfaces */
+  --color-paper: #f5f2eb;
+  --color-paper-2: #ece7dc;
+  --color-body: #3f3c37; /* body text on light */
+  --color-muted: #5f5b54; /* secondary text on light */
+
+  /* Brand accents (sunrise to dusk) */
+  --color-amber: #e79100;
+  --color-rose: #b9619a;
+  --color-violet: #4940cd;
+  --color-violet-light: #8b84ff;
+
+  --animate-rise: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      translate: 0 1.5rem;
+    }
+    to {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
 }
 
 @layer base {
   html {
+    scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
   body {
-    background-color: var(--color-charcoal);
+    background-color: var(--color-ink);
+    color: var(--color-fog);
+  }
+
+  /* Leave room for the sticky header when jumping to a section. */
+  [id] {
+    scroll-margin-top: 5rem;
+  }
+
+  ::selection {
+    background-color: var(--color-amber);
+    color: var(--color-ink);
   }
 
   :focus-visible {
-    outline: 2px solid white;
+    outline: 2px solid var(--color-amber);
     outline-offset: 3px;
   }
-}
 
-/*
- * Page backdrop: an orange-to-violet gradient with a half-transparent
- * architectural line drawing on top. To use a photo instead, replace
- * /public/images/backdrop.svg (or point --backdrop-image at another file).
- */
-@utility site-backdrop {
-  --backdrop-image: url('/images/backdrop.svg');
-  position: relative;
-  isolation: isolate;
-  background-image: linear-gradient(45deg, var(--color-sunrise) 0%, var(--color-dusk) 100%);
-
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background: var(--backdrop-image) center / cover no-repeat;
-    opacity: 0.5;
-    pointer-events: none;
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
   }
 }
 
-/* Keeps white copy legible on the lighter parts of the gradient. */
-@utility text-lift {
-  text-shadow: 0 1px 2px rgb(26 33 47 / 0.18);
+/* Small uppercase label above headings (e.g. "Kansas · Missouri", "Contact"). */
+@utility eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
 }
 
-/*
- * Shared two-column page grid on large screens: a narrow 163px side column
- * (used for photos on the About page) and a main content column.
- * Place content with `lg:col-start-2`; on small screens everything stacks.
- */
-@utility page-grid {
-  @media (width >= 64rem) {
-    display: grid;
-    grid-template-columns: 163px minmax(0, 48rem);
-    column-gap: 0.75rem;
+/* Brand gradient for accent rules. */
+@utility bg-brand-gradient {
+  background-image: linear-gradient(90deg, var(--color-amber), var(--color-rose) 55%, var(--color-violet-light));
+}
+
+/* Page-load entrance; stagger with style="--delay: 120ms". */
+@utility enter {
+  @media (prefers-reduced-motion: no-preference) {
+    animation: var(--animate-rise);
+    animation-delay: var(--delay, 0ms);
   }
+}
+
+/* Fade/rise as the element scrolls into view (no JavaScript; skipped where unsupported). */
+@utility reveal {
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      animation: rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 70%;
+    }
+  }
+}
+
+/* Fades the hero contour drawing out towards the text side. */
+@utility mask-fade-left {
+  mask-image: linear-gradient(to right, transparent 0%, black 55%);
 }
